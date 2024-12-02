@@ -27,8 +27,7 @@ namespace TrabalhoPOO_Simples
     {
         #region Attributes
         int crm;
-        ESPECIALIDADE especialidade;
-        
+        ESPECIALIDADE especialidade;       
 
         #endregion
 
@@ -45,6 +44,26 @@ namespace TrabalhoPOO_Simples
         
         public Medico(string nome, DateTime dataN, int nif, Morada morada, int crm, ESPECIALIDADE especialidade)
         {
+            if (string.IsNullOrEmpty(nome))
+                throw new MedicoException("O nome do médico não pode ser vazio.");
+
+            if (dataN > DateTime.Now.AddYears(-18))
+                throw new MedicoException("O médico tem de ter mais de 18 anos.");
+
+            if (nif <= 0 || nif.ToString().Length != 9)
+                throw new MedicoException("O NIF do médico é inválido.");
+
+            if (morada == null)
+                throw new MedicoException("A morada do médico não pode ser nula.");
+
+            if (crm <= 0)
+                throw new MedicoException("O CRM deve ser um número positivo.");
+
+            if (!Enum.IsDefined(typeof(ESPECIALIDADE), especialidade))
+            {
+                throw new MedicoException("A especialidade do médico é inválida.");
+            }
+
             base.Nome = nome;
             base.DataN = dataN;
             base.NIF = nif;
@@ -75,10 +94,52 @@ namespace TrabalhoPOO_Simples
         #endregion
 
         #region OtherMethods
-        public Medico CriaMedico(string nome, DateTime dataN, int nif, Morada morada, int crm, ESPECIALIDADE especialidade)
+
+        public void EditaMedico(string novoNome, DateTime novaDataN, int novoNif, Morada novaMorada, int novoCrm, ESPECIALIDADE novaEspecialidade)
         {
-            return new Medico(nome, dataN, nif, morada, crm, especialidade);
+            if (this == null)
+            {
+                throw new MedicoException("O objeto médico não pode ser nulo.");
+            }
+
+            if (string.IsNullOrWhiteSpace(novoNome))
+            {
+                throw new MedicoException("O nome do médico não pode ser vazio ou nulo.");
+            }
+
+            if (novaDataN > DateTime.Now.AddYears(-18))
+            {
+                throw new MedicoException("O médico deve ser maior de 18 anos.");
+            }
+
+            if (novoNif.ToString().Length != 9)
+            {
+                throw new MedicoException("O NIF deve conter 9 dígitos.");
+            }
+
+            if (novaMorada == null)
+            {
+                throw new MedicoException("A nova morada não pode ser nula.");
+            }
+
+            if (novoCrm <= 0)
+            {
+                throw new MedicoException("O CRM deve ser um número positivo.");
+            }
+
+            if (!Enum.IsDefined(typeof(ESPECIALIDADE), novaEspecialidade))
+            {
+                throw new MedicoException("Especialidade inválida.");
+            }
+
+            this.Nome = novoNome;
+            this.DataN = novaDataN;
+            this.NIF = novoNif;
+            this.Morada = novaMorada;
+            this.CRM = novoCrm;
+            this.Especialidade = novaEspecialidade;
         }
+
         #endregion
 
         #region Destructor

@@ -43,11 +43,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ListaMedicosException.cs" />
     <Compile Include="Medico.cs" />
+    <Compile Include="MedicoException.cs" />
+    <Compile Include="Medicos.cs" />
+    <Compile Include="MiniMedico.cs" />
     <Compile Include="Morada.cs" />
     <Compile Include="Pessoa.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegrasMedicos.cs" />
+    <Compile Include="RegrasMedicosException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
