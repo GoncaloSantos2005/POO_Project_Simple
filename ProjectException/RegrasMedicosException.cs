@@ -34,5 +34,19 @@ namespace TrabalhoPOO_Simples
         /// </summary>
         /// <param name="message">A mensagem de erro que descreve o motivo do erro.</param>
         public RegrasMedicosException(string message) : base(message) { }
+
+        /// <summary>
+        /// Constrói uma nova instância da exceção <see cref="RegrasMedicosException"/>.
+        /// </summary>
+        /// <param name="message">A mensagem de erro que descreve o motivo do erro.</param>
+        /// <param name="code">O código originário do erro.</param>
+        /// <returns>
+        /// -1: Nome Incorreto
+        ///  1: Valido
+        /// </returns>
+        public RegrasMedicosException(string message, int code) : base(message)
+        {
+            Console.WriteLine("Código do Erro:" + code + " Message:" + message);
+        }
     }
 }

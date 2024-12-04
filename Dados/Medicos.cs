@@ -41,45 +41,62 @@ namespace TrabalhoPOO_Simples
         #region Properties
         #endregion
 
-
-
         #region Overrides
         #endregion
 
         #region OtherMethods
-        public void AdicionarMedico(Medico medico)
+        /// <summary>
+        /// Retorna todos os médicos da lista.
+        /// </summary>
+        /// <returns>Lista de objetos <see cref="Medico"/>.</returns>
+        public List<Medico> ObterTodos()
         {
-            if(!(medico is Medico))
-                throw new ListaMedicosException("O objeto não é do tipo Medico");
-
-            if (medico == null)
-                throw new ListaMedicosException("A referência ao objeto medico não pode ser nula");
-            medicos.Add(medico);
+            return medicos;
         }
 
-        public void RemoverMedico(int crm)
+        public int AdicionarMedico(Medico medico)
         {
-            if (crm < 0)
-                throw new ListaMedicosException("O CRM deve ser um número positivo.");
+            int resultado = ValidarListaMedicos.ValidarMedico(medico);
+            if (resultado != 1)
+                throw new ListaMedicosException("Médico não adicionado", resultado);
+            medicos.Add(medico);
+            return resultado;
+        }
 
-            medicos.Remove(FindMedico(crm));
+        public int RemoverMedico(int crm)
+        {
+            try
+            {
+                Medico medico = FindMedico(crm);
+                medicos.Remove(FindMedico(crm));
+            }
+            catch (ListaMedicosException ex) 
+            {
+                throw ex;
+            }
+            return 1;
         }
 
         private Medico FindMedico(int crm)
         {
-            if (crm < 0)
-                throw new ListaMedicosException("O CRM deve ser um número positivo.");
-            Medico medico = medicos.Find(m => m.CRM == crm);
-            if (medico == null)
-                throw new ListaMedicosException("Médico não encontrado, valide o crm e tente novamente");
-            return medico;
+            try { 
+                if (crm < 0)
+                    throw new ListaMedicosException("O CRM deve ser um número positivo.", -2);
+                Medico medico = medicos.Find(m => m.CRM == crm);
+                ValidarListaMedicos.ValidarMedico(medico);
+                return medico;
+            }
+            catch (ListaMedicosException ex)
+            {
+                throw ex;    
+            }
         }
 
         public List<Medico> ObterMedicoFiltro(ESPECIALIDADE esp)
         {
             List<Medico> lista = medicos.FindAll(a => a.Especialidade.Equals(esp));
             if (lista.Count == 0)
-                throw new RegrasMedicosException("Não foi encontrado nenhum medico na lista");
+                return null;
 
             return lista;
         }
@@ -87,7 +104,7 @@ namespace TrabalhoPOO_Simples
         {
             List<Medico> listaFiltro = medicos.FindAll(a => a.Especialidade.Equals(esp));
             if (listaFiltro.Count == 0)
-                throw new RegrasMedicosException("Não foi encontrado nenhum medico na lista");
+                return null;
 
             List<MiniMedico> lista = new List<MiniMedico>();
 
@@ -97,7 +114,27 @@ namespace TrabalhoPOO_Simples
             }
             return lista;
         }
- 
+
+        public int OrganizarMedicosAlfabeticamente()
+        {   
+
+            int resultado = ValidarListaMedicos.ValidarLista(this);
+            
+            if (resultado != 1)
+                throw new ListaMedicosException("Lista não foi organizada com sucesso", resultado);
+
+            this.medicos.Sort(); //usa o metodo implementado em Medico para organizar alfabeticamente
+            
+            return 1;
+        }
+
+        /// <summary>
+        /// Retorna o número total de médicos na lista.
+        /// </summary>
+        public int Count
+        {
+            get { return medicos.Count; }
+        }
         #endregion
 
         #region Destructor

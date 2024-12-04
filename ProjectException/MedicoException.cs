@@ -34,5 +34,24 @@ namespace TrabalhoPOO_Simples
         /// </summary>
         /// <param name="message">A mensagem de erro que descreve o motivo do erro.</param>
         public MedicoException(string message) : base(message) { }
+
+        /// <summary>
+        /// Constrói uma nova instância da exceção <see cref="MedicoException"/>.
+        /// </summary>
+        /// <param name="message">A mensagem de erro que descreve o motivo do erro.</param>
+        /// <param name="code">O código originário do erro.</param>
+        /// <returns>
+        /// -1: Nome Incorreto
+        /// -2: Idade Incorreta
+        /// -3: NIF Inválido
+        /// -4: Morada Inválida
+        /// -5: CRM Inválido
+        /// -6: Especialidade Inválida
+        ///  1: Valido
+        /// </returns>
+        public MedicoException(string message, int code) : base(message)
+        {
+            Console.WriteLine("Código do Erro:" + code + " Message:" + message);
+        }
     }
 }

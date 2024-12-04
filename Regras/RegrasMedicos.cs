@@ -25,58 +25,69 @@ namespace TrabalhoPOO_Simples
     /// </summary>
     /// <remarks></remarks>
     /// <example></example>
-    public class RegrasMedicos
+    public static class RegrasMedicos
     {
         #region Attributes
         #endregion
 
         #region Methods
 
-        #region Constructors
-
-        /// <summary>
-        /// The default Constructor.
-        /// </summary>
-        public RegrasMedicos()
-        {
-        }
-
-        #endregion
-
         #region Properties
         #endregion
-
 
 
         #region Overrides
         #endregion
 
         #region OtherMethods
-        public bool CriaEAdicionaMedicoLista(PERMISSOES perm, Medicos medicos, string nome, DateTime dataN, int nif, Morada morada, int crm, ESPECIALIDADE especialidade)
+        /// <summary>
+        /// Constrói uma nova instância da exceção <see cref="RegrasMedicosException"/>.
+        /// </summary>
+        /// <param name="perm">Permissao do utilizador.</param>
+        /// <param name="medicos">Lista de medicos</param>
+        /// <param name="nome">Nome do médico</param>
+        /// <param name="dataN">Nome do médico</param>
+        /// <param name="nif">Nome do médico</param>
+        /// <param name="morada">Nome do médico</param>
+        /// <param name="crm">Nome do médico</param>
+        /// <param name="especialidade">Nome do médico</param>
+        /// <returns>
+        /// -1: Nome Incorreto
+        ///  1: Valido
+        /// </returns>
+        public static int CriaEAdicionaMedicoLista(PERMISSOES perm, Medicos medicos, string nome, DateTime dataN, int nif, Morada morada, int crm, ESPECIALIDADE especialidade)
         {
             Medico medico;
             switch (perm)
             {
                 case PERMISSOES.None:
-                    throw new RegrasMedicosException("O utilizador não tem permissões de criação.");
+                    return -1;
                 case PERMISSOES.Low:
                 case PERMISSOES.High:
-                    try { 
-                    medico = new Medico(nome, dataN, nif, morada, crm, especialidade);
-                    medicos.AdicionarMedico(medico);
-                    
-                    }catch(RegrasMedicosException rme)
+                    try 
                     {
-
+                        medico = new Medico(nome, dataN, nif, morada, crm, especialidade);
+                        medicos.AdicionarMedico(medico);                                    
                     }
-                    break;
+                    catch (MedicoException me)
+                    {
+                        throw me;
+                    }
+                    catch (ListaMedicosException lme)
+                    {
+                        throw lme;
+                    }
+                    catch(RegrasMedicosException rme)
+                    {
+                        throw rme;    
+                    }
+                    return 1;
                 default:
-                    throw new RegrasMedicosException("Permissão inválida fornecida.");
+                    return -2;
             }
-            return true;
         }
 
-        public bool RemoveMedicoLista(PERMISSOES perm, Medicos medicos, int crm)
+        public static bool RemoveMedicoLista(PERMISSOES perm, Medicos medicos, int crm)
         {
             switch (perm)
             {
@@ -100,7 +111,7 @@ namespace TrabalhoPOO_Simples
             return true;
         }
 
-        public bool EditarMedicoLista(PERMISSOES perm, Medicos medicos, int crm, string novoNome, DateTime novaDataN, int novoNif, Morada novaMorada, int novoCrm, ESPECIALIDADE novaEspecialidade)
+        public static bool EditarMedicoLista(PERMISSOES perm, Medicos medicos, int crm, string novoNome, DateTime novaDataN, int novoNif, Morada novaMorada, int novoCrm, ESPECIALIDADE novaEspecialidade)
         {
             switch (perm)
             {
@@ -124,7 +135,7 @@ namespace TrabalhoPOO_Simples
             return true;
         }
 
-        public List<object> PesquisaMedicos(Medicos medicos, ESPECIALIDADE especialidade, PERMISSOES permissoes)
+        public static List<object> PesquisaMedicos(Medicos medicos, ESPECIALIDADE especialidade, PERMISSOES permissoes)
         {
             if (medicos == null)
                 throw new RegrasMedicosException("A referência ao objeto não pode ser nula.");
@@ -147,16 +158,6 @@ namespace TrabalhoPOO_Simples
             }
         }
         #endregion
-
-        #region Destructor
-        /// <summary>
-        /// The destructor.
-        /// </summary>
-        ~RegrasMedicos()
-        {
-        }
-        #endregion
-
         #endregion
     }
 }

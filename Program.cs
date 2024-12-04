@@ -60,7 +60,23 @@ namespace TrabalhoPOO_Simples
             {
                 Console.WriteLine($"Erro: {ex.Message}");
             }
-            */                
+            */
+            Medicos listaMedicos = new Medicos();
+            int resu;
+            //listaMedicos.AdicionarMedico(new Medico("João Silva", new DateTime(1980, 5, 12), 123456789, new Morada(), 1234, ESPECIALIDADE.Cardiologia));
+            //listaMedicos.AdicionarMedico(new Medico("Maria Santos", new DateTime(1985, 8, 20), 987654321, new Morada(), 5678, ESPECIALIDADE.Neurologia));
+            //listaMedicos.AdicionarMedico(new Medico("Carlos Costa", new DateTime(1990, 12, 15), 123987456, new Morada(), 9012, ESPECIALIDADE.Cardiologia));
+            resu = RegrasMedicos.CriaEAdicionaMedicoLista(PERMISSOES.High, listaMedicos, "João Silva", new DateTime(1980, 5, 12), 123456789, new Morada(), 1234, ESPECIALIDADE.Cardiologia);
+            if (resu == 1)
+                Console.WriteLine($"Médico Criado e Adicionado à lista!");
+            else
+                Console.WriteLine($"Médico Não adicionado, consultar erro " + resu);
+            RegrasMedicos.CriaEAdicionaMedicoLista(PERMISSOES.Low, listaMedicos, "Maria Santos", new DateTime(1985, 8, 20), 987654321, new Morada(), 5678, ESPECIALIDADE.Neurologia);
+            RegrasMedicos.CriaEAdicionaMedicoLista(PERMISSOES.None, listaMedicos, "Carlos Costa", new DateTime(1990, 12, 15), 123987456, new Morada(), 9012, ESPECIALIDADE.Cardiologia);
+            
+            int res = listaMedicos.OrganizarMedicosAlfabeticamente();
+
+            
 
             Console.ReadKey();
         }

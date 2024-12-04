@@ -34,5 +34,23 @@ namespace TrabalhoPOO_Simples
         /// </summary>
         /// <param name="message">A mensagem de erro que descreve o motivo do erro.</param>
         public ListaMedicosException(string message) : base(message) { }
+
+        /// <summary>
+        /// Constrói uma nova instância da exceção <see cref="ListaMedicosException"/>.
+        /// </summary>
+        /// <param name="message">A mensagem de erro que descreve o motivo do erro.</param>
+        /// <param name="code">O código originário do erro.</param>
+        /// /// <return>
+        /// -1: Objeto nulo
+        /// -2: CRM Inválido
+        /// -3: Lista nula
+        /// -4: Lista vazia
+        /// 
+        ///  1: Valido
+        /// </return>
+        public ListaMedicosException(string message, int code) : base(message)
+        {
+            Console.WriteLine("Código do Erro:" + code + " Message:" + message);
+        }
     }
 }
