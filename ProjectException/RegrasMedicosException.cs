@@ -41,7 +41,21 @@ namespace TrabalhoPOO_Simples
         /// <param name="message">A mensagem de erro que descreve o motivo do erro.</param>
         /// <param name="code">O código originário do erro.</param>
         /// <returns>
-        /// -1: Nome Incorreto
+        /// -1: Nome Inválido
+        /// -2: Idade Incorreta
+        /// -3: NIF Inválido
+        /// -4: Morada Inválida
+        /// -5: CRM Inválido
+        /// -6: Especialidade Inválida
+        /// -7: Objeto Medico nulo
+        /// 
+        /// -11: Lista nula
+        /// -12: Lista vazia
+        /// -13: CRM Duplicado
+        /// 
+        /// -21: Sem Permissão 
+        /// -22:
+        /// 
         ///  1: Valido
         /// </returns>
         public RegrasMedicosException(string message, int code) : base(message)

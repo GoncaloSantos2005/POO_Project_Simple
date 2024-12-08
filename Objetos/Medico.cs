@@ -44,17 +44,12 @@ namespace TrabalhoPOO_Simples
         
         public Medico(string nome, DateTime dataN, int nif, Morada morada, int crm, ESPECIALIDADE especialidade)
         {
-            int resultado = ValidarMedico.ValidarCamposMedico(nome, dataN, nif, morada, crm, especialidade);
-            if (resultado != 1)
-            {
-                throw new MedicoException("Parâmetros inválidos", resultado);
-            }
-                base.Nome = nome;
-                base.DataN = dataN;
-                base.NIF = nif;
-                base.Morada = morada;
-                this.crm = crm;
-                this.especialidade = especialidade;                     
+            base.Nome = nome;
+            base.DataN = dataN;
+            base.NIF = nif;
+            base.Morada = morada;
+            this.crm = crm;
+            this.especialidade = especialidade;                     
         }
 
         #endregion
@@ -84,30 +79,53 @@ namespace TrabalhoPOO_Simples
         /// <returns>Valor negativo se este nome for menor, 0 se igual, positivo se maior.</returns>
         public int CompareTo(Medico outroMedico)
         {
-            if (outroMedico == null) return 1;
+            int res = ValidarMedico.ValidarObjetoMedico(outroMedico);
+            if (res != 1)
+                throw new MedicoException("Operação de Comparar foi interrompida! ", res);
             return string.Compare(this.Nome, outroMedico.Nome, StringComparison.OrdinalIgnoreCase);
         }
         #endregion
-
+        
         #region OtherMethods
-        public int EditaMedico(string novoNome, DateTime novaDataN, int novoNif, Morada novaMorada, int novoCrm, ESPECIALIDADE novaEspecialidade)
+        public Medico EditaMedico(string novoNome, DateTime novaDataN, int novoNif, Morada novaMorada, ESPECIALIDADE novaEspecialidade)
         {
-            int resultado = ValidarMedico.ValidarCamposMedico(novoNome, novaDataN, novoNif, novaMorada, novoCrm, novaEspecialidade);
+            int resultado = ValidarMedico.ValidarCamposMedico(novoNome, novaDataN, novoNif, novaMorada, novaEspecialidade);
             if (resultado != 1)
             {
-                throw new MedicoException("Parâmetros inválidos", resultado);
+                return null;
             }
 
             this.Nome = novoNome;
             this.DataN = novaDataN;
             this.NIF = novoNif;
             this.Morada = novaMorada;
-            this.CRM = novoCrm;
             this.Especialidade = novaEspecialidade;
 
-            return 1;
+            return this;
         }
 
+        /// <summary>
+        /// Cria um objeto da classe <see cref="Medico"/> após validar os parâmetros fornecidos.
+        /// </summary>
+        /// <param name="nome">Nome do médico.</param>
+        /// <param name="dataN">Data de nascimento do médico.</param>
+        /// <param name="nif">Número de Identificação Fiscal (NIF).</param>
+        /// <param name="morada">Objeto do tipo <see cref="Morada"/> contendo a morada do médico.</param>
+        /// <param name="crm">CRM do médico.</param>
+        /// <param name="especialidade">Especialidade do médico.</param>
+        /// <returns>Um objeto do tipo <see cref="Medico"/>.</returns>
+        /// <exception cref="MedicoException">
+        /// Lançada quando os parâmetros fornecidos não são válidos.
+        /// </exception>
+        public static Medico CriaMedico(string nome, DateTime dataN, int nif, Morada morada, int crm, ESPECIALIDADE especialidade)
+        {
+            int resultado = ValidarMedico.ValidarCamposMedico(nome, dataN, nif, morada, especialidade);
+            if (resultado != 1)
+            {
+                throw new MedicoException("Parâmetros inválidos", resultado);
+            }
+            return new Medico(nome, dataN, nif, morada, crm, especialidade);
+        }
         #endregion
 
         #region Destructor

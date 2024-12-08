@@ -21,7 +21,7 @@ namespace TrabalhoPOO_Simples
     {
         #region Attributes
         string nome;
-        ESPECIALIDADE especialidade;
+        int crm;
         #endregion
 
         #region Methods
@@ -35,10 +35,10 @@ namespace TrabalhoPOO_Simples
         {
         }
 
-        public MiniMedico(string nome, ESPECIALIDADE esp)
+        public MiniMedico(string nome, int crm)
         {
             this.nome = nome;
-            this.especialidade = esp;   
+            this.crm = crm;   
         }
 
         #endregion

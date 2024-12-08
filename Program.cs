@@ -23,7 +23,7 @@ namespace TrabalhoPOO_Simples
             }
             try
             {
-                medico.EditaMedico("Alfredo Lopes", medico.DataN, medico.NIF, medico.Morada, medico.CRM, medico.Especialidade);
+                medico.EditaMedico("Alfredo Lopes", medico.DataN, medico.NIF, medico.Morada, medico.Especialidade);
                 Console.WriteLine("Editado");
             }
             catch (MedicoException ex)
@@ -61,22 +61,58 @@ namespace TrabalhoPOO_Simples
                 Console.WriteLine($"Erro: {ex.Message}");
             }
             */
-            Medicos listaMedicos = new Medicos();
-            int resu;
             //listaMedicos.AdicionarMedico(new Medico("João Silva", new DateTime(1980, 5, 12), 123456789, new Morada(), 1234, ESPECIALIDADE.Cardiologia));
             //listaMedicos.AdicionarMedico(new Medico("Maria Santos", new DateTime(1985, 8, 20), 987654321, new Morada(), 5678, ESPECIALIDADE.Neurologia));
             //listaMedicos.AdicionarMedico(new Medico("Carlos Costa", new DateTime(1990, 12, 15), 123987456, new Morada(), 9012, ESPECIALIDADE.Cardiologia));
-            resu = RegrasMedicos.CriaEAdicionaMedicoLista(PERMISSOES.High, listaMedicos, "João Silva", new DateTime(1980, 5, 12), 123456789, new Morada(), 1234, ESPECIALIDADE.Cardiologia);
-            if (resu == 1)
-                Console.WriteLine($"Médico Criado e Adicionado à lista!");
-            else
-                Console.WriteLine($"Médico Não adicionado, consultar erro " + resu);
-            RegrasMedicos.CriaEAdicionaMedicoLista(PERMISSOES.Low, listaMedicos, "Maria Santos", new DateTime(1985, 8, 20), 987654321, new Morada(), 5678, ESPECIALIDADE.Neurologia);
-            RegrasMedicos.CriaEAdicionaMedicoLista(PERMISSOES.None, listaMedicos, "Carlos Costa", new DateTime(1990, 12, 15), 123987456, new Morada(), 9012, ESPECIALIDADE.Cardiologia);
-            
-            int res = listaMedicos.OrganizarMedicosAlfabeticamente();
+            Medico medico1 = null;
+            Medico medico2 = null;
+            Medico medico3 = null;
+            try { 
+             medico1 = RegrasMedicos.TentaCriarMedico(PERMISSOES.High, "João Silva", new DateTime(1980, 5, 12), 123456789, new Morada(), 1234, ESPECIALIDADE.Cardiologia);
+             medico2 = RegrasMedicos.TentaCriarMedico(PERMISSOES.Low, "Maria Santos", new DateTime(1985, 8, 20), 987654321, new Morada(), 5678, ESPECIALIDADE.Neurologia);
+             medico3 = RegrasMedicos.TentaCriarMedico(PERMISSOES.Low, "Carlos Costa", new DateTime(1990, 12, 15), 123987456, new Morada(), 9012, ESPECIALIDADE.Cardiologia);
+            }
+            catch (MedicoException )
+            {
+               
+            }
+            catch (RegrasMedicosException )
+            {
+                
+            }
+
+            try
+            {
+                int r = RegrasMedicos.TentarAdicionarMedico(PERMISSOES.High, medico1);
+                if (r != 1)
+                    Console.WriteLine("Error code: "+r);
+                r = RegrasMedicos.TentarAdicionarMedico(PERMISSOES.High, medico2);
+                if (r != 1)
+                    Console.WriteLine("Error code: " + r);
+                r = RegrasMedicos.TentarAdicionarMedico(PERMISSOES.None, medico3);
+                if (r != 1)
+                    Console.WriteLine("Error code: " + r);
+            }
+            catch(ListaMedicosException)
+            {
+
+            }
+            if (medico1 == null || medico2 == null || medico3 == null)
+                Console.WriteLine("Médico não criado!");
+            try
+            { 
+            int res = Medicos.OrganizarMedicosAlfabeticamente();
+                if (res != 1) Console.WriteLine($"Lista não organizada");
+            }catch(ListaMedicosException)
+            {
+
+            }
+
+
 
             
+            RegrasMedicos.TentarEditarMedico(PERMISSOES.High, 1234, "Goncalo", new DateTime(1986, 5, 12), 111111111, new Morada(), ESPECIALIDADE.Cardiologia);
+
 
             Console.ReadKey();
         }

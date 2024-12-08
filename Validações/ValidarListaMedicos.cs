@@ -31,49 +31,40 @@ namespace TrabalhoPOO_Simples
         #endregion
 
         #region OtherMethods
-        /// <summary>
-        /// Verifica o objeto Medico
-        /// </summary>
-        /// <param name="medico">Objeto Medico para validação.</param>
-        /// <returns>
-        /// -1: Objeto Medico nulo
-        ///  1: Valido
-        /// </returns>
-        public static int ValidarMedico(Medico medico)
-        {
-            if(medico == null) return -1;
-            return 1;
-        }
-
-        /// <summary>
-        /// Verifica o campo CRM
-        /// </summary>
-        /// <param name="crm">campo crm para validação.</param>
-        /// <returns>
-        /// -2: CRM Inválido
-        ///  1: Valido
-        /// </returns>
-        public static int ValidarCRM(int crm)
-        {
-            if (crm < 0) return -2;
-            return 1;
-        }
-
+     
         /// <summary>
         /// Verifica se a lista tem alguma informação
         /// </summary>
-        /// <param name="medicos">campo crm para validação.</param>
         /// <returns>
-        /// -3: Lista nula
-        /// -4: Lista vazia
+        /// -11: Lista nula
+        /// -12: Lista vazia
         ///  1: Valido
         /// </returns>
-        public static int ValidarLista(Medicos medicos)
+        public static int ValidarLista()
         {
-            if (medicos == null) return -3;
-            if (medicos.Count == 0)
-                return -4;
+            
+            if (Medicos.ObterTodos() == null) return -11;
+            if (Medicos.Contador == 0)
+                return -12;
             return 1; // Lista válida
+        }
+
+        /// <summary>
+        /// Verifica se existe algum CRM já na lista
+        /// </summary>
+        /// <param name="crm">campo crm para validação.</param>
+        /// <returns>
+        /// -13: CRM duplicado
+        ///  1: Valido
+        /// </returns>
+        public static int VerificarCRMDuplicado(int crm)
+        {
+            foreach(Medico m in Medicos.ObterTodos())
+            {
+                if (m.CRM.Equals(crm))
+                    return -13;
+            }
+            return 1;
         }
 
         #endregion

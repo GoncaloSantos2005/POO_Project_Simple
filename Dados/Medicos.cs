@@ -18,25 +18,14 @@ namespace TrabalhoPOO_Simples
     /// </summary>
     /// <remarks></remarks>
     /// <example></example>
-    public class Medicos
+    public static class Medicos
     {
         #region Attributes
-        List<Medico> medicos;
+        static List<Medico> medicos = new List<Medico>();
+        static int contador=0;
         #endregion
 
         #region Methods
-
-        #region Constructors
-
-        /// <summary>
-        /// The default Constructor.
-        /// </summary>
-        public Medicos()
-        {
-            medicos = new List<Medico>();
-        }
-
-        #endregion
 
         #region Properties
         #endregion
@@ -49,26 +38,32 @@ namespace TrabalhoPOO_Simples
         /// Retorna todos os médicos da lista.
         /// </summary>
         /// <returns>Lista de objetos <see cref="Medico"/>.</returns>
-        public List<Medico> ObterTodos()
+        public static List<Medico> ObterTodos()
         {
             return medicos;
         }
 
-        public int AdicionarMedico(Medico medico)
+        public static int AdicionarMedico(Medico medico)
         {
-            int resultado = ValidarListaMedicos.ValidarMedico(medico);
+            int resultado = ValidarMedico.ValidarObjetoMedico(medico);
             if (resultado != 1)
                 throw new ListaMedicosException("Médico não adicionado", resultado);
+            
+            resultado = ValidarListaMedicos.VerificarCRMDuplicado(medico.CRM);
+            if (resultado != 1)
+                throw new ListaMedicosException("Médico não adicionado", resultado);
+
             medicos.Add(medico);
+            contador++;
             return resultado;
         }
 
-        public int RemoverMedico(int crm)
+        public static int RemoverMedico(int crm)
         {
             try
             {
-                Medico medico = FindMedico(crm);
                 medicos.Remove(FindMedico(crm));
+                contador--;
             }
             catch (ListaMedicosException ex) 
             {
@@ -77,72 +72,126 @@ namespace TrabalhoPOO_Simples
             return 1;
         }
 
-        private Medico FindMedico(int crm)
+        public static int AtualizarMedico(Medico medicoAtualizado)
         {
+            try
+            {
+                Medico medico = FindMedico(medicoAtualizado.CRM);
+                medico.Nome = medicoAtualizado.Nome;
+                medico.DataN = medicoAtualizado.DataN;
+                medico.NIF = medicoAtualizado.NIF;
+                medico.Morada = medicoAtualizado.Morada;
+                medico.Especialidade = medicoAtualizado.Especialidade;
+            }
+            catch (ListaMedicosException ex)
+            {
+                throw ex;
+            }
+            return 1;
+        } 
+
+        private static Medico FindMedico(int crm)
+        {
+            int res;
             try { 
-                if (crm < 0)
-                    throw new ListaMedicosException("O CRM deve ser um número positivo.", -2);
-                Medico medico = medicos.Find(m => m.CRM == crm);
-                ValidarListaMedicos.ValidarMedico(medico);
-                return medico;
+                res = ValidarMedico.ValidarCRM(crm);
+                if (res != 1)
+                    throw new ListaMedicosException("Não foi possível encontrar o Médico", res);
+                Medico medico = null;
+
+                foreach(Medico m in medicos)
+                {
+                    if (m.CRM.Equals(crm))
+                    {
+                        medico = m;
+                        break;
+                    }
+                }
+                res = ValidarMedico.ValidarObjetoMedico(medico);
+                if (res == 1)
+                    return medico;
+                return null;
             }
             catch (ListaMedicosException ex)
             {
                 throw ex;    
             }
+            
         }
 
-        public List<Medico> ObterMedicoFiltro(ESPECIALIDADE esp)
+        public static List<Medico> ObterMedicoFiltro(ESPECIALIDADE esp)
         {
-            List<Medico> lista = medicos.FindAll(a => a.Especialidade.Equals(esp));
-            if (lista.Count == 0)
+            List<Medico> lista = null;
+            int contador_ = 0;
+            foreach (Medico m in medicos)
+            {
+                if (m.Especialidade.Equals(esp))
+                {
+                    lista.Add(m);
+                    contador_ ++;
+                }
+            }
+            if (contador_ == 0)
                 return null;
 
             return lista;
         }
-        public List<MiniMedico> ObterMiniMedicoFiltro(ESPECIALIDADE esp)
+        public static List<MiniMedico> ObterMiniMedicoFiltro(ESPECIALIDADE esp)
         {
-            List<Medico> listaFiltro = medicos.FindAll(a => a.Especialidade.Equals(esp));
-            if (listaFiltro.Count == 0)
+            List<Medico> listaFiltro = null;
+            int contador_=0;
+            foreach(Medico m in medicos)
+            {
+                if (m.Especialidade.Equals(esp)) 
+                { 
+                    listaFiltro.Add(m);
+                    contador_++;
+                }
+            }
+
+            if (contador_ == 0)
                 return null;
 
             List<MiniMedico> lista = new List<MiniMedico>();
 
             foreach(Medico medico in listaFiltro)
             {                
-                lista.Add(new MiniMedico(medico.Nome, medico.Especialidade));
+                lista.Add(new MiniMedico(medico.Nome, medico.CRM));
             }
             return lista;
         }
 
-        public int OrganizarMedicosAlfabeticamente()
+        public static Medico ObterMedico(int crm)
+        {
+            try {
+                return FindMedico(crm);
+            } catch (ListaMedicosException) 
+            { 
+                throw;
+            } 
+        }
+
+        public static int OrganizarMedicosAlfabeticamente()
         {   
+            int resultado = ValidarListaMedicos.ValidarLista();
 
-            int resultado = ValidarListaMedicos.ValidarLista(this);
-            
             if (resultado != 1)
-                throw new ListaMedicosException("Lista não foi organizada com sucesso", resultado);
-
-            this.medicos.Sort(); //usa o metodo implementado em Medico para organizar alfabeticamente
-            
+                return resultado;
+            try {
+            medicos.Sort(); //usa o metodo implementado em Medico para organizar alfabeticamente
+            }catch(MedicoException me)
+            {
+                throw me;
+            }
             return 1;
         }
 
         /// <summary>
         /// Retorna o número total de médicos na lista.
         /// </summary>
-        public int Count
+        public static int Contador
         {
-            get { return medicos.Count; }
-        }
-        #endregion
-
-        #region Destructor
-        /// <summary>
-        /// The destructor.
-        /// </summary>
-        ~Medicos()
-        {
+            get { return contador; }
         }
         #endregion
 

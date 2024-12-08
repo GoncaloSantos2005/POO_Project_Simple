@@ -41,10 +41,9 @@ namespace TrabalhoPOO_Simples
         /// <param name="message">A mensagem de erro que descreve o motivo do erro.</param>
         /// <param name="code">O código originário do erro.</param>
         /// /// <return>
-        /// -1: Objeto nulo
-        /// -2: CRM Inválido
-        /// -3: Lista nula
-        /// -4: Lista vazia
+        /// -11: CRM Inválido
+        /// -12: Lista nula
+        /// -13: Lista vazia
         /// 
         ///  1: Valido
         /// </return>

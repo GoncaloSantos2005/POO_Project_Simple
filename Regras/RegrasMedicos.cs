@@ -41,120 +41,192 @@ namespace TrabalhoPOO_Simples
 
         #region OtherMethods
         /// <summary>
-        /// Constrói uma nova instância da exceção <see cref="RegrasMedicosException"/>.
+        /// Tenta criar um objeto do tipo Medico
         /// </summary>
         /// <param name="perm">Permissao do utilizador.</param>
-        /// <param name="medicos">Lista de medicos</param>
         /// <param name="nome">Nome do médico</param>
-        /// <param name="dataN">Nome do médico</param>
-        /// <param name="nif">Nome do médico</param>
-        /// <param name="morada">Nome do médico</param>
-        /// <param name="crm">Nome do médico</param>
-        /// <param name="especialidade">Nome do médico</param>
+        /// <param name="dataN">Data de Nascimento do médico</param>
+        /// <param name="nif">NIF do médico</param>
+        /// <param name="morada">Morada do médico</param>
+        /// <param name="crm">CRM do médico</param>
+        /// <param name="especialidade">Especialidade do médico</param>
         /// <returns>
-        /// -1: Nome Incorreto
-        ///  1: Valido
+        ///  null: Sem permissão
+        ///  MedicoException: Exceção    
+        ///  RegrasMedicosException: Exceção    
+        ///  
+        ///  Medico medico: Objeto Criado
         /// </returns>
-        public static int CriaEAdicionaMedicoLista(PERMISSOES perm, Medicos medicos, string nome, DateTime dataN, int nif, Morada morada, int crm, ESPECIALIDADE especialidade)
+        public static Medico TentaCriarMedico(PERMISSOES perm, string nome, DateTime dataN, int nif, Morada morada, int crm, ESPECIALIDADE especialidade)
         {
-            Medico medico;
-            switch (perm)
+            switch (perm) 
             {
                 case PERMISSOES.None:
-                    return -1;
+                    return null;
                 case PERMISSOES.Low:
                 case PERMISSOES.High:
-                    try 
+                    try
                     {
-                        medico = new Medico(nome, dataN, nif, morada, crm, especialidade);
-                        medicos.AdicionarMedico(medico);                                    
+                        Medico medico = Medico.CriaMedico(nome, dataN, nif, morada, crm, especialidade);
+                        return medico;
                     }
                     catch (MedicoException me)
                     {
                         throw me;
                     }
+                    catch (RegrasMedicosException rme)
+                    {
+                        throw rme;
+                    }
+                    
+                default:
+                    return null;
+            }
+        }
+
+        /// <summary>
+        /// Tenta adicionar um médico aos dados
+        /// </summary>
+        /// <param name="perm">Permissao do utilizador.</param>
+        /// <param name="medico">Objeto medico a ser adicionado</param>
+        /// <returns>
+        /// -21: Sem permissão
+        /// ListaMedicosException: Exceção
+        ///  1: Valido
+        /// </returns>
+        public static int TentarAdicionarMedico(PERMISSOES perm, Medico medico)
+        {
+            switch (perm)
+            {
+                case PERMISSOES.None:
+                    return -21;
+                case PERMISSOES.Low:
+                case PERMISSOES.High:
+                    try 
+                    {
+                        Medicos.AdicionarMedico(medico);                                    
+                    }
                     catch (ListaMedicosException lme)
                     {
                         throw lme;
                     }
-                    catch(RegrasMedicosException rme)
-                    {
-                        throw rme;    
-                    }
                     return 1;
                 default:
-                    return -2;
+                    return -21;
             }
         }
-
-        public static bool RemoveMedicoLista(PERMISSOES perm, Medicos medicos, int crm)
+        /// <summary>
+        /// Tenta adicionar um médico aos dados
+        /// </summary>
+        /// <param name="perm">Permissao do utilizador.</param>
+        /// <param name="crm">CRM medico a ser removido</param>
+        /// <returns>
+        /// -21: Sem permissão
+        /// ListaMedicosException: Exceção
+        ///  1: Valido
+        /// </returns>
+        public static int TentaRemoverMedico(PERMISSOES perm, int crm)
         {
             switch (perm)
             {
                 case PERMISSOES.None:
                 case PERMISSOES.Low:
-                    throw new RegrasMedicosException("O utilizador não tem permissões de remoção.");
+                    return -21;
                 
                 case PERMISSOES.High:
                     try
                     {
-                        medicos.RemoverMedico(crm);
+                        Medicos.RemoverMedico(crm);
                     }
-                    catch (RegrasMedicosException rme)
+                    catch (ListaMedicosException lme)
                     {
-
+                        throw lme;
                     }
                     break;
                 default:
-                    throw new RegrasMedicosException("Permissão inválida fornecida.");
+                    return -21;
             }
-            return true;
+            return 1;
         }
 
-        public static bool EditarMedicoLista(PERMISSOES perm, Medicos medicos, int crm, string novoNome, DateTime novaDataN, int novoNif, Morada novaMorada, int novoCrm, ESPECIALIDADE novaEspecialidade)
+        /// <summary>
+        /// Tenta editar um objeto do tipo Medico
+        /// </summary>
+        /// <param name="perm">Permissao do utilizador.</param>
+        /// <param name="crm">CRM do médico a ser editado</param>
+        /// <param name="nome">Nome do médico</param>
+        /// <param name="dataN">Data de Nascimento do médico</param>
+        /// <param name="nif">NIF do médico</param>
+        /// <param name="morada">Morada do médico</param>
+        /// <param name="especialidade">Especialidade do médico</param>
+        /// <returns>
+        ///  null: Sem permissão
+        ///  ListaMedicosException: Exceção    
+        ///  
+        ///  Medico medico: Objeto Editado
+        /// </returns>
+        public static Medico TentarEditarMedico(PERMISSOES perm, int crm, string nome, DateTime dataN, int nif, Morada morada, ESPECIALIDADE especialidade)
+        {
+            Medico medico = null;
+            switch (perm)
+            {
+                case PERMISSOES.None:
+                case PERMISSOES.Low:
+                    return null;
+                case PERMISSOES.High:
+                    try
+                    {
+                        medico = Medicos.ObterMedico(crm);
+                        medico.EditaMedico(nome, dataN, nif, morada, especialidade);
+                        return medico;
+                    }
+                    catch (ListaMedicosException lme)
+                    {
+                        throw lme;
+                    }
+                default:
+                    return null;
+            }            
+        }
+        public static int TentarAtualizarMedico(PERMISSOES perm, Medico medico)
         {
             switch (perm)
             {
                 case PERMISSOES.None:
-                    throw new RegrasMedicosException("O utilizador não tem permissões de edição.");
+                    return -21;
 
                 case PERMISSOES.Low:
                 case PERMISSOES.High:
                     try
                     {
-                        medicos.RemoverMedico(crm);
+                        Medicos.AtualizarMedico(medico);
                     }
-                    catch (RegrasMedicosException rme)
+                    catch (ListaMedicosException lme)
                     {
-
+                        throw lme;
                     }
                     break;
                 default:
-                    throw new RegrasMedicosException("Permissão inválida fornecida.");
+                    return -21;
             }
-            return true;
+            return 1;
         }
 
-        public static List<object> PesquisaMedicos(Medicos medicos, ESPECIALIDADE especialidade, PERMISSOES permissoes)
+        public static List<object> PesquisaMedicos(ESPECIALIDADE especialidade, PERMISSOES permissoes)
         {
-            if (medicos == null)
-                throw new RegrasMedicosException("A referência ao objeto não pode ser nula.");
-
             switch (permissoes)
             {
                 case PERMISSOES.None:
-                    throw new RegrasMedicosException("O utilizador não tem permissões de consulta.");
+                    return null;
 
                 case PERMISSOES.Low:
-                    // Retorna uma lista de MiniMedico para permissões Low
-                    return medicos.ObterMiniMedicoFiltro(especialidade).Cast<object>().ToList();
+                    return Medicos.ObterMiniMedicoFiltro(especialidade).Cast<object>().ToList();
 
                 case PERMISSOES.High:
-                    // Retorna uma lista de Medico para permissões High
-                    return medicos.ObterMedicoFiltro(especialidade).Cast<object>().ToList();
+                    return Medicos.ObterMedicoFiltro(especialidade).Cast<object>().ToList();
 
                 default:
-                    throw new RegrasMedicosException("Permissão inválida fornecida.");
+                    return null;
             }
         }
         #endregion
