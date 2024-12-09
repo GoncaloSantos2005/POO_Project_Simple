@@ -361,3 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/ProjectException/RegrasMedicosException.cs
+/Dados/Medicos.cs
+/Dados/Medicos.cs
+/Dados/Medicos.cs
