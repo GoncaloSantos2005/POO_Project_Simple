@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DadosNegocio;
+using ProjectException;
+using ObjetosNegocio;
+using RegrasNegocio;
 
 namespace TrabalhoPOO_Simples
 {

@@ -33,6 +33,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DadosNegocio">
+      <HintPath>..\DadosNegocio\bin\Debug\DadosNegocio.dll</HintPath>
+    </Reference>
+    <Reference Include="ObjetosNegocio">
+      <HintPath>..\ObjetosNegocio\bin\Debug\ObjetosNegocio.dll</HintPath>
+    </Reference>
+    <Reference Include="ProjectException">
+      <HintPath>..\ProjectException\bin\Debug\ProjectException.dll</HintPath>
+    </Reference>
+    <Reference Include="RegrasNegocio">
+      <HintPath>..\RegrasNegocio\bin\Debug\RegrasNegocio.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,19 +55,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ProjectException\ListaMedicosException.cs" />
-    <Compile Include="Objetos\Medico.cs" />
-    <Compile Include="ProjectException\MedicoException.cs" />
-    <Compile Include="Dados\Medicos.cs" />
-    <Compile Include="Objetos\MiniMedico.cs" />
-    <Compile Include="Objetos\Morada.cs" />
-    <Compile Include="Objetos\Pessoa.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Regras\RegrasMedicos.cs" />
-    <Compile Include="ProjectException\RegrasMedicosException.cs" />
-    <Compile Include="Validações\ValidarListaMedicos.cs" />
-    <Compile Include="Validações\ValidarMedico.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
