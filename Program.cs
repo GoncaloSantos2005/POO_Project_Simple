@@ -111,8 +111,9 @@ namespace TrabalhoPOO_Simples
 
 
             
-            RegrasMedicos.TentarEditarMedico(PERMISSOES.High, 1234, "Goncalo", new DateTime(1986, 5, 12), 111111111, new Morada(), ESPECIALIDADE.Cardiologia);
+            medico1 = RegrasMedicos.TentarEditarMedico(PERMISSOES.High, medico1, "Goncalo", new DateTime(1986, 5, 12), 111111111, new Morada(), ESPECIALIDADE.Cardiologia);
 
+            RegrasMedicos.TentarAtualizarMedico(PERMISSOES.High, medico1);
 
             Console.ReadKey();
         }

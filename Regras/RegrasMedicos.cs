@@ -165,9 +165,11 @@ namespace TrabalhoPOO_Simples
         ///  
         ///  Medico medico: Objeto Editado
         /// </returns>
-        public static Medico TentarEditarMedico(PERMISSOES perm, int crm, string nome, DateTime dataN, int nif, Morada morada, ESPECIALIDADE especialidade)
+        public static Medico TentarEditarMedico(PERMISSOES perm, Medico medico, string nome, DateTime dataN, int nif, Morada morada, ESPECIALIDADE especialidade)
         {
-            Medico medico = null;
+            int res = ValidarMedico.ValidarObjetoMedico(medico);
+            if (res != 1)
+                return null;
             switch (perm)
             {
                 case PERMISSOES.None:
@@ -176,7 +178,6 @@ namespace TrabalhoPOO_Simples
                 case PERMISSOES.High:
                     try
                     {
-                        medico = Medicos.ObterMedico(crm);
                         medico.EditaMedico(nome, dataN, nif, morada, especialidade);
                         return medico;
                     }
@@ -190,11 +191,13 @@ namespace TrabalhoPOO_Simples
         }
         public static int TentarAtualizarMedico(PERMISSOES perm, Medico medico)
         {
+            int res = ValidarMedico.ValidarObjetoMedico(medico);
+            if (res != 1)
+                return res;
             switch (perm)
             {
                 case PERMISSOES.None:
                     return -21;
-
                 case PERMISSOES.Low:
                 case PERMISSOES.High:
                     try
