@@ -110,13 +110,11 @@ namespace TrabalhoPOO_Simples
             }catch(ListaMedicosException)
             {
 
-            }
-
-
-
+            }            
             
-            RegrasMedicos.TentarEditarMedico(PERMISSOES.High, 1234, "Goncalo", new DateTime(1986, 5, 12), 111111111, new Morada(), ESPECIALIDADE.Cardiologia);
+            RegrasMedicos.TentarEditarMedico(PERMISSOES.High, medico1, "Goncalo", new DateTime(1986, 5, 12), 111111111, new Morada(), ESPECIALIDADE.Cardiologia);
 
+            RegrasMedicos.TentarAtualizarMedico(PERMISSOES.High, medico1);
 
             Console.ReadKey();
         }
