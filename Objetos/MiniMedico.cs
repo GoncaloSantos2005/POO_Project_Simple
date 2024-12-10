@@ -11,7 +11,7 @@ using System;
 namespace TrabalhoPOO_Simples
 {
     /// <summary>
-    /// Purpose:
+    /// Purpose: Class criada para dar suporte a <see cref="Medico"/>, para mostrar apenas alguns atributos.
     /// Created by: gonca
     /// Created on: 12/2/2024 12:29:51 PM
     /// </summary>
@@ -44,6 +44,16 @@ namespace TrabalhoPOO_Simples
         #endregion
 
         #region Properties
+        public int CRM
+        {
+            get { return crm; }
+            set { crm = value; }
+        }
+        public string Nome
+        {
+            get { return nome; }
+            set { nome = value; }
+        }
         #endregion
 
 

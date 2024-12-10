@@ -19,7 +19,7 @@ namespace TrabalhoPOO_Simples
         High = 2,
     }
     /// <summary>
-    /// Purpose:
+    /// Purpose: Regras de Negócio para Medico
     /// Created by: gonca
     /// Created on: 12/2/2024 12:20:26 PM
     /// </summary>
@@ -54,6 +54,7 @@ namespace TrabalhoPOO_Simples
         ///  null: Sem permissão
         ///  MedicoException: Exceção    
         ///  RegrasMedicosException: Exceção    
+        ///  RegrasMedicosException: -21    
         ///  
         ///  Medico medico: Objeto Criado
         /// </returns>
@@ -62,13 +63,19 @@ namespace TrabalhoPOO_Simples
             switch (perm) 
             {
                 case PERMISSOES.None:
-                    return null;
+                    throw new RegrasMedicosException("", -21);
                 case PERMISSOES.Low:
                 case PERMISSOES.High:
                     try
                     {
-                        Medico medico = Medico.CriaMedico(nome, dataN, nif, morada, crm, especialidade);
-                        return medico;
+                        int res = ValidarListaMedicos.VerificarCRMDuplicado(crm);
+                        if (res != 1)
+                        
+                            throw new ListaMedicosException("", res);
+
+                            Medico medico = Medico.CriaMedico(nome, dataN, nif, morada, crm, especialidade);
+                            return medico;
+                        
                     }
                     catch (MedicoException me)
                     {
@@ -80,18 +87,19 @@ namespace TrabalhoPOO_Simples
                     }
                     
                 default:
-                    return null;
+                    throw new RegrasMedicosException("", -21);
             }
         }
 
         /// <summary>
         /// Tenta adicionar um médico aos dados
         /// </summary>
-        /// <param name="perm">Permissao do utilizador.</param>
-        /// <param name="medico">Objeto medico a ser adicionado</param>
+        /// <param name="perm">Permissão do utilizador.</param>
+        /// <param name="medico">Objeto médico a ser adicionado <see cref="Medico"/></param>
         /// <returns>
         /// -21: Sem permissão
         /// ListaMedicosException: Exceção
+        /// RegrasMedicosException: -21  
         ///  1: Valido
         /// </returns>
         public static int TentarAdicionarMedico(PERMISSOES perm, Medico medico)
@@ -153,28 +161,29 @@ namespace TrabalhoPOO_Simples
         /// Tenta editar um objeto do tipo Medico
         /// </summary>
         /// <param name="perm">Permissao do utilizador.</param>
-        /// <param name="crm">CRM do médico a ser editado</param>
+        /// <param name="medico">Objeto Medico <see cref="Medico"/> a ser editado</param>
         /// <param name="nome">Nome do médico</param>
         /// <param name="dataN">Data de Nascimento do médico</param>
         /// <param name="nif">NIF do médico</param>
         /// <param name="morada">Morada do médico</param>
         /// <param name="especialidade">Especialidade do médico</param>
         /// <returns>
-        ///  null: Sem permissão
+        ///  Consultar código de erros
         ///  ListaMedicosException: Exceção    
-        ///  
+        ///  RegrasMedicosException: -21    
+        ///  -21
         ///  Medico medico: Objeto Editado
         /// </returns>
         public static Medico TentarEditarMedico(PERMISSOES perm, Medico medico, string nome, DateTime dataN, int nif, Morada morada, ESPECIALIDADE especialidade)
         {
             int res = ValidarMedico.ValidarObjetoMedico(medico);
             if (res != 1)
-                return null;
+                throw new MedicoException("", res);
             switch (perm)
             {
                 case PERMISSOES.None:
                 case PERMISSOES.Low:
-                    return null;
+                    throw new RegrasMedicosException("", -21);
                 case PERMISSOES.High:
                     try
                     {
@@ -186,9 +195,20 @@ namespace TrabalhoPOO_Simples
                         throw lme;
                     }
                 default:
-                    return null;
+                    throw new RegrasMedicosException("", -21);
             }            
         }
+        /// <summary>
+        /// Tenta atualizar um objeto do tipo Medico na lista
+        /// </summary>
+        /// <param name="perm">Permissao do utilizador.</param>
+        /// <param name="medico">Objeto Medico <see cref="Medico"/> a ser editado</param>
+        /// <returns>
+        ///  Consultar códigos de erros
+        ///  -21
+        ///  ListaMedicosException: Exceção    
+        ///  1: Sucesso
+        /// </returns>
         public static int TentarAtualizarMedico(PERMISSOES perm, Medico medico)
         {
             int res = ValidarMedico.ValidarObjetoMedico(medico);
@@ -215,13 +235,24 @@ namespace TrabalhoPOO_Simples
             return 1;
         }
 
+        /// <summary>
+        /// Filtra uma lista de Médicos consoante a especialidade 
+        /// </summary>
+        /// <param name="especialidade">Especialidade a ser filtrada</param>
+        /// <param name="permissoes">Permissao do utilizador.</param>
+        /// <returns>
+        ///  RegrasMedicosException: Exceção -21 
+        ///  List<MiniMedico>: Lista com conteudo reduzido
+        ///  List<Medico>: Lista com conteudo total
+        ///  
+        /// </returns>
         public static List<object> PesquisaMedicos(ESPECIALIDADE especialidade, PERMISSOES permissoes)
         {
             switch (permissoes)
             {
                 case PERMISSOES.None:
-                    return null;
-
+                    throw new RegrasMedicosException("", -21);
+                    
                 case PERMISSOES.Low:
                     return Medicos.ObterMiniMedicoFiltro(especialidade).Cast<object>().ToList();
 
@@ -229,7 +260,7 @@ namespace TrabalhoPOO_Simples
                     return Medicos.ObterMedicoFiltro(especialidade).Cast<object>().ToList();
 
                 default:
-                    return null;
+                    throw new RegrasMedicosException("", -21);
             }
         }
         #endregion

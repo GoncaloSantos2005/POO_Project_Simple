@@ -31,18 +31,19 @@ namespace TrabalhoPOO_Simples
         #endregion
 
         #region OtherMethods
-     
+
         /// <summary>
         /// Verifica se a lista tem alguma informação
         /// </summary>
         /// <returns>
         /// -11: Lista nula
         /// -12: Lista vazia
+        /// -13: CRM Duplicado
+        /// -14: Médico não encontrado
         ///  1: Valido
         /// </returns>
         public static int ValidarLista()
-        {
-            
+        {            
             if (Medicos.ObterTodos() == null) return -11;
             if (Medicos.Contador == 0)
                 return -12;

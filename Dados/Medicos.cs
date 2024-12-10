@@ -8,11 +8,12 @@
 **/
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace TrabalhoPOO_Simples
 {
     /// <summary>
-    /// Purpose:
+    /// Purpose: Guarda numa List um conjunto de Medico
     /// Created by: gonca
     /// Created on: 12/2/2024 11:13:59 AM
     /// </summary>
@@ -43,21 +44,38 @@ namespace TrabalhoPOO_Simples
             return medicos;
         }
 
+        /// <summary>
+        /// Adiciona um Médico à lista dos Medicos
+        /// </summary>
+        /// <param name="medico">Objeto a adicionar do tipo <see cref="Medico"/>.</param>
+        /// <returns>
+        /// Ver lista de erros possível
+        /// 1: sucesso
+        /// </returns>
         public static int AdicionarMedico(Medico medico)
         {
             int resultado = ValidarMedico.ValidarObjetoMedico(medico);
             if (resultado != 1)
-                throw new ListaMedicosException("Médico não adicionado", resultado);
+                return resultado;
             
             resultado = ValidarListaMedicos.VerificarCRMDuplicado(medico.CRM);
             if (resultado != 1)
-                throw new ListaMedicosException("Médico não adicionado", resultado);
+                return resultado;
 
             medicos.Add(medico);
             contador++;
             return resultado;
         }
 
+        /// <summary>
+        /// Remove um Médico da lista através do CRM
+        /// </summary>
+        /// <param name="crm">Identificador do objeto Medico.</param>
+        /// <returns>
+        /// Ver lista de erros possível
+        /// ListaMedicosException: Exceção 
+        /// 1: sucesso
+        /// </returns>
         public static int RemoverMedico(int crm)
         {
             try
@@ -72,6 +90,15 @@ namespace TrabalhoPOO_Simples
             return 1;
         }
 
+        /// <summary>
+        /// Atualiza um Médico da lista
+        /// </summary>
+        /// <param name="medicoAtualizado">Objeto a atualizar do tipo <see cref="Medico"/>.</param>
+        /// <returns>
+        /// Ver lista de erros possível
+        /// ListaMedicosException: Exceção 
+        /// 1: sucesso
+        /// </returns>
         public static int AtualizarMedico(Medico medicoAtualizado)
         {
             try
@@ -88,8 +115,17 @@ namespace TrabalhoPOO_Simples
                 throw ex;
             }
             return 1;
-        } 
+        }
 
+        /// <summary>
+        /// Encontra um Médico na lista através do CRM
+        /// </summary>
+        /// <param name="crm">Identificador do Médico</param>
+        /// <returns>
+        /// Ver lista de erros possível
+        ///  ListaMedicosException: Exceção    
+        /// medico: Objeto encontrado
+        /// </returns>
         private static Medico FindMedico(int crm)
         {
             int res;
@@ -110,15 +146,24 @@ namespace TrabalhoPOO_Simples
                 res = ValidarMedico.ValidarObjetoMedico(medico);
                 if (res == 1)
                     return medico;
-                return null;
+                throw new ListaMedicosException("Não foi possível encontrar o Médico",-14);
             }
-            catch (ListaMedicosException ex)
+            catch (ListaMedicosException)
             {
-                throw ex;    
+                throw;    
             }
             
         }
 
+
+        /// <summary>
+        /// Encontra uma lista de Médicos com uma certa especialidade
+        /// </summary>
+        /// <param name="esp">Especialidade a ser filtrada</param>
+        /// <returns>
+        /// Ver lista de erros possível
+        /// lista: Lista do tipo <see cref="Medico"/> com os resultados encontrados.
+        /// </returns>
         public static List<Medico> ObterMedicoFiltro(ESPECIALIDADE esp)
         {
             List<Medico> lista = null;
@@ -132,25 +177,27 @@ namespace TrabalhoPOO_Simples
                 }
             }
             if (contador_ == 0)
-                return null;
+                throw new ListaMedicosException("", -14);
 
             return lista;
         }
+
+        /// <summary>
+        /// Encontra uma lista de Médicos com uma certa especialidade e retorna um conjunto de atributos reduzidos do Médico <see cref="MiniMedico"/>
+        /// </summary>
+        /// <param name="esp">Especialidade a ser filtrada</param>
+        /// <returns>
+        /// Ver lista de erros possível
+        /// lista: Lista do tipo <see cref="MiniMedico"/> com os resultados encontrados e reduzidos.
+        /// </returns>
         public static List<MiniMedico> ObterMiniMedicoFiltro(ESPECIALIDADE esp)
         {
-            List<Medico> listaFiltro = null;
-            int contador_=0;
-            foreach(Medico m in medicos)
-            {
-                if (m.Especialidade.Equals(esp)) 
-                { 
-                    listaFiltro.Add(m);
-                    contador_++;
-                }
-            }
+            List<Medico> listaFiltro = ObterMedicoFiltro(esp);
 
-            if (contador_ == 0)
-                return null;
+            if(listaFiltro.Count == 0)
+            {
+                throw new ListaMedicosException("", -14);
+            }
 
             List<MiniMedico> lista = new List<MiniMedico>();
 
@@ -161,16 +208,34 @@ namespace TrabalhoPOO_Simples
             return lista;
         }
 
-        public static Medico ObterMedico(int crm)
+        /// <summary>
+        /// Obtem uma informação reduzida de um Médico
+        /// </summary>
+        /// <param name="crm">CRM do Médico a ser encontrado</param>
+        /// <returns>
+        /// Ver lista de erros possível
+        /// ListaMedicosException: Exceção
+        /// Objeto MiniMedico: Objeto com a informação reduzida do Médico <see cref="MiniMedico"/>
+        /// </returns>
+        public static MiniMedico ObterMedico(int crm)
         {
             try {
-                return FindMedico(crm);
+                Medico medico = FindMedico(crm);
+                return new MiniMedico(medico.Nome, medico.CRM);
             } catch (ListaMedicosException) 
             { 
                 throw;
             } 
         }
 
+        /// <summary>
+        /// Organiza a Lista de Medicos Alfabeticamente
+        /// </summary>
+        /// <returns>
+        /// Ver lista de erros possível
+        /// MedicoException: Exceção
+        /// 1: Sucesso
+        /// </returns>
         public static int OrganizarMedicosAlfabeticamente()
         {   
             int resultado = ValidarListaMedicos.ValidarLista();
