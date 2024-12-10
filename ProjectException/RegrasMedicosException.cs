@@ -52,6 +52,7 @@ namespace TrabalhoPOO_Simples
         /// -11: Lista nula
         /// -12: Lista vazia
         /// -13: CRM Duplicado
+        /// -14: Médico não encontrado
         /// 
         /// -21: Sem Permissão 
         /// -22:

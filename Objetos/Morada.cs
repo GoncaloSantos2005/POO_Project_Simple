@@ -11,7 +11,7 @@ using System;
 namespace TrabalhoPOO_Simples
 {
     /// <summary>
-    /// Purpose:
+    /// Purpose: Class responsável por manipular uma respetiva Morada
     /// Created by: gonca
     /// Created on: 12/1/2024 6:22:26 PM
     /// </summary>

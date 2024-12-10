@@ -44,6 +44,7 @@ namespace TrabalhoPOO_Simples
         /// -11: CRM Inválido
         /// -12: Lista nula
         /// -13: Lista vazia
+        /// -14: Médico não encontrado
         ///  1: Valido
         /// </return>
         public ListaMedicosException(string message, int code) : base(message)

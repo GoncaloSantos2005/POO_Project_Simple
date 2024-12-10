@@ -11,7 +11,7 @@ using System;
 namespace TrabalhoPOO_Simples
 {
     /// <summary>
-    /// Purpose:
+    /// Purpose: Class pai de algumas Class no projeto
     /// Created by: gonca
     /// Created on: 12/1/2024 6:21:23 PM
     /// </summary>

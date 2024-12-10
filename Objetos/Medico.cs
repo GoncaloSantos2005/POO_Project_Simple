@@ -17,7 +17,7 @@ namespace TrabalhoPOO_Simples
         Cardiologia = 2,
     }
     /// <summary>
-    /// Purpose:
+    /// Purpose: Class responsável por manipular Medico
     /// Created by: gonca
     /// Created on: 12/1/2024 6:21:02 PM
     /// </summary>
@@ -71,28 +71,65 @@ namespace TrabalhoPOO_Simples
         #region Overrides
         #endregion
 
-        #region IComparable<Medico> Implementation
+        #region IComparable<Medico> 
         /// <summary>
         /// Compara os nomes dos médicos para ordenar alfabeticamente.
         /// </summary>
         /// <param name="outroMedico">Outro objeto Medico para comparação.</param>
-        /// <returns>Valor negativo se este nome for menor, 0 se igual, positivo se maior.</returns>
+        /// <returns>
+        /// -1 se este nome for menor,
+        /// 0 se igual, 
+        /// 1 se maior.
+        /// </returns>
         public int CompareTo(Medico outroMedico)
         {
             int res = ValidarMedico.ValidarObjetoMedico(outroMedico);
             if (res != 1)
                 throw new MedicoException("Operação de Comparar foi interrompida! ", res);
-            return string.Compare(this.Nome, outroMedico.Nome, StringComparison.OrdinalIgnoreCase);
+
+            string nome1 = this.Nome.ToLower();
+            string nome2 = outroMedico.Nome.ToLower();
+
+            //retorna o min de caracteres das 2 strings
+            int minLength = Math.Min(nome1.Length, nome2.Length);
+
+            for (int i = 0; i < minLength; i++)
+            {
+                if (nome1[i] < nome2[i])
+                    return -1; // `this.Nome` vem antes de `outroMedico.Nome`
+                else if (nome1[i] > nome2[i])
+                    return 1;  // `this.Nome` vem depois de `outroMedico.Nome`
+            }
+
+            // Se os prefixos são iguais, comparar pelo comprimento
+            if (nome1.Length < nome2.Length)
+                return -1; // Nome mais curto vem primeiro
+            else if (nome1.Length > nome2.Length)
+                return 1;  // Nome mais longo vem depois
+
+            return 0; // Os nomes são iguais
         }
         #endregion
-        
+
         #region OtherMethods
+        /// <summary>
+        /// Edita um objeto da classe <see cref="Medico"/> após validar os parâmetros fornecidos.
+        /// </summary>
+        /// <param name="novoNome">Nome do médico.</param>
+        /// <param name="novaDataN">Data de nascimento do médico.</param>
+        /// <param name="novoNif">Número de Identificação Fiscal (NIF).</param>
+        /// <param name="novaMorada">Objeto do tipo <see cref="Morada"/> com a morada do médico.</param>
+        /// <param name="novaEspecialidade">Especialidade do médico.</param>
+        /// <returns>Objeto do tipo <see cref="Medico"/> já com os atributos editados.</returns>
+        /// <exception cref="MedicoException">
+        /// Lançada quando os parâmetros fornecidos não são válidos.
+        /// </exception>
         public Medico EditaMedico(string novoNome, DateTime novaDataN, int novoNif, Morada novaMorada, ESPECIALIDADE novaEspecialidade)
         {
             int resultado = ValidarMedico.ValidarCamposMedico(novoNome, novaDataN, novoNif, novaMorada, novaEspecialidade);
             if (resultado != 1)
             {
-                return null;
+                throw new MedicoException("Médico não editado", resultado);
             }
 
             this.Nome = novoNome;
@@ -110,7 +147,7 @@ namespace TrabalhoPOO_Simples
         /// <param name="nome">Nome do médico.</param>
         /// <param name="dataN">Data de nascimento do médico.</param>
         /// <param name="nif">Número de Identificação Fiscal (NIF).</param>
-        /// <param name="morada">Objeto do tipo <see cref="Morada"/> contendo a morada do médico.</param>
+        /// <param name="morada">Objeto do tipo <see cref="Morada"/> com a morada do médico.</param>
         /// <param name="crm">CRM do médico.</param>
         /// <param name="especialidade">Especialidade do médico.</param>
         /// <returns>Um objeto do tipo <see cref="Medico"/>.</returns>
@@ -122,7 +159,7 @@ namespace TrabalhoPOO_Simples
             int resultado = ValidarMedico.ValidarCamposMedico(nome, dataN, nif, morada, especialidade);
             if (resultado != 1)
             {
-                throw new MedicoException("Parâmetros inválidos", resultado);
+                throw new MedicoException("Médico não criado", resultado);
             }
             return new Medico(nome, dataN, nif, morada, crm, especialidade);
         }
