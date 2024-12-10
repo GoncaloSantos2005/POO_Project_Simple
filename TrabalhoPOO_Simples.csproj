@@ -63,5 +63,10 @@
   <ItemGroup>
     <Content Include="Imagem_WhatsApp_2024-12-02_as_23.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="_Controller\" />
+    <Folder Include="_Model\" />
+    <Folder Include="_View\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
