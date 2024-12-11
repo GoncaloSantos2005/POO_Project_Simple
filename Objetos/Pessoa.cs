@@ -17,6 +17,7 @@ namespace TrabalhoPOO_Simples
     /// </summary>
     /// <remarks></remarks>
     /// <example></example>
+    [Serializable]
     public class Pessoa
     {
         #region Attributes

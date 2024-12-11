@@ -23,6 +23,8 @@ namespace TrabalhoPOO_Simples
     /// </summary>
     /// <remarks></remarks>
     /// <example></example>
+
+    [Serializable]
     public class Medico : Pessoa, IComparable<Medico>
     {
         #region Attributes
@@ -69,6 +71,16 @@ namespace TrabalhoPOO_Simples
         #endregion
 
         #region Overrides
+        /// <summary>
+        /// @brief Método que retorna uma representação textual do objeto.
+        /// </summary>
+        /// <returns>
+        /// Uma string formatada contendo o CRM, o Nome, o NIF, a Data de Nascimento e a Especialidade.
+        /// </returns>
+        public override string ToString()
+        {
+            return "CRM:" + crm + " Nome:" + Nome + " NIF:" + NIF + " Data Nascimento:" + DataN + " Especialidade:" + especialidade;
+        }
         #endregion
 
         #region IComparable<Medico> 

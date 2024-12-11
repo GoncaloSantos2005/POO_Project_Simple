@@ -17,6 +17,7 @@ namespace TrabalhoPOO_Simples
     /// </summary>
     /// <remarks></remarks>
     /// <example></example>
+    
     public class MiniMedico
     {
         #region Attributes

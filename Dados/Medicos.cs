@@ -8,7 +8,11 @@
 **/
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection.Emit;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Runtime.Serialization.Formatters.Binary;
+using TrabalhoPOO_Simples.Dados;
 
 namespace TrabalhoPOO_Simples
 {
@@ -19,10 +23,12 @@ namespace TrabalhoPOO_Simples
     /// </summary>
     /// <remarks></remarks>
     /// <example></example>
+    [Serializable]
     public static class Medicos
     {
         #region Attributes
         static List<Medico> medicos = new List<Medico>();
+        [NonSerialized]
         static int contador=0;
         #endregion
 
@@ -258,6 +264,61 @@ namespace TrabalhoPOO_Simples
         {
             get { return contador; }
         }
+        #endregion
+
+        #region Files
+        /// <summary>
+        /// Guarda a lista de médicos num ficheiro.
+        /// </summary>
+        /// <param name="fileName">O nome do ficheiro onde os dados serão guardados.</param>
+        /// <returns>1 em caso de sucesso, 0 caso contrário.</returns>
+        public static int GuardarMedicosFicheiro(string fileName)
+        {
+            try
+            {
+                using (FileStream s = new FileStream(fileName, FileMode.Create, FileAccess.Write))
+                {
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    formatter.Serialize(s, medicos); // Serializa a lista estática
+                }
+                return 1; // Sucesso
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao guardar os médicos: {ex.Message}");
+                return 0; // Erro
+            }
+        }
+
+        /// <summary>
+        /// Lê a lista de médicos de um ficheiro.
+        /// </summary>
+        /// <param name="fileName">O nome do ficheiro de onde os dados serão lidos.</param>
+        /// <returns>1 em caso de sucesso, 0 caso contrário.</returns>
+        public static int LerMedicosFicheiro(string fileName)
+        {
+            try
+            {
+                if (!File.Exists(fileName))
+                {
+                    Console.WriteLine("Ficheiro não encontrado!");
+                    return 0; // Ficheiro não existe
+                }
+
+                using (FileStream s = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+                {
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    medicos = (List<Medico>)formatter.Deserialize(s); // Desserializa e atribui à lista estática
+                }
+                return 1; // Sucesso
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao ler os médicos: {ex.Message}");
+                return 0; // Erro
+            }
+        }
+
         #endregion
 
         #endregion

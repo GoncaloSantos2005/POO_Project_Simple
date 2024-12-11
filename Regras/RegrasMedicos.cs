@@ -12,6 +12,7 @@ using System.Linq;
 
 namespace TrabalhoPOO_Simples
 {
+    [Serializable]
     public enum PERMISSOES
     {
         None = 0,
